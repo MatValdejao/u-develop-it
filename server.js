@@ -1,5 +1,6 @@
 const express = require("express")
-const mysql = require("mysql2")
+const mysql = require("mysql2");
+const { resourceUsage } = require("process");
 
 const PORT = 3001 || process.env.PORT;
 const app = express()
@@ -21,8 +22,35 @@ const db = mysql.createConnection(
     console.log("connected to the database election")
 )
 
-db.query(`SELECT * FROM candidates`, (err, rows) => {
+// db.query(`SELECT * FROM candidates`, (err, rows) => {
+//     console.log(rows)
+// })
+
+// Get a single candidate
+db.query(`SELECT * FROM candidates WHERE id = 1`, (err, rows) => {
+    if (err) {
+        console.log(err)
+    }
     console.log(rows)
+})
+
+// Delete a candidate
+// db.query(`DELETE FROM candidates WHERE id = ?`, 1, (err, result) => {
+//     if (err) {
+//         console.log(err)
+//     }
+//     console.log(result)
+// })
+
+// Create a candidate
+const sql = `INSERT INTO candidates (id, first_name, last_name, industry_connected) VALUES (?,?,?,?)`
+const params = [1, "Ronald", "Firbank", 1]
+
+db.query(sql, params, (err, result) => {
+    if (err) {
+        console.log(err)
+    }
+    console.log(result)
 })
 
 // Default response for any other request (Not Found)
